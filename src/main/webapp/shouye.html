@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航菜单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+
+            list-style-type: none;
+        }
+
+        .topDiv {
+            padding-left: 220px;
+            width: 100%;
+            margin: 0;
+            height: 114px;
+        }
+
+        #head {
+            width: 150px;
+            height: 20px;
+        }
+
+        #head a {
+            color: #666666;
+            text-emphasis: none;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        b {
+            width: 100%;
+            height: 2px;
+        }
+
+        #head b {
+            color: #265895;
+
+        }
+
+        #head .t {
+            position: relative;
+            top: 14px;
+            left: 1080px;
+        }
+
+        .Search {
+            width: 287px;
+            height: 38px;
+            background: url(https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/style_res/top_hunt_bg.png) no-repeat;
+            margin-top: 15px;
+            float: right;
+        }
+
+        .search_text {
+            float: left;
+            width: 195px;
+            margin-top: 2px;
+            height: 30px;
+            line-height: 30px;
+            outline: none;
+            border: none;
+            font-family: "å¾®è½¯é›…é»‘";
+            color: #5c5c5c;
+            margin-left: 15px;
+        }
+
+        #head div a:not(a[href="b"]):hover {
+            color: #1D6DB7;
+        }
+
+        #head .Search {
+            position: relative;
+            left: 1050px;
+            margin-top: 25px;
+        }
+
+        .button {
+            background: url(https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/style_res/top_hunt.png) no-repeat;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        .logo {
+            position: absolute;
+            left: 420px;
+            top: 24px;
+            width: 384px;
+            height: 70px;
+            background-image: url(https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/logo.png);
+            background-size: 384px 70px;
+            /* z-index: -1; */
+        }
+
+        .fdj input {
+            position: absolute;
+            float: right;
+            height: 23px;
+            margin-top: 8px;
+            right: 0px;
+            outline: none;
+            border: none;
+        }
+
+        .navWrap {
+            position: absolute;
+            width: 100%;
+            background: #265895;
+            height: 50px;
+            margin: 0;
+        }
+
+        nav {
+
+            padding-left: 420px;
+            width: 1000px;
+            height: 50px;
+
+        }
+
+        nav ul[class="first"] {
+            display: flex;
+            /*justify-content: space-between;*/
+        }
+
+        .first > li {
+            position: relative; /* 为二级菜单定位做准备 */
+            width: 100px;
+            height: 50px;
+            /* border: 1px solid blue; */
+            flex: 1;
+            list-style: none;
+            text-align: center;
+            line-height: 50px;
+            background-color: #265895;
+        }
+
+        .second > li {
+            list-style: none;
+            text-align: center;
+            width: 160px;
+            line-height: 50px;
+            line-height: 50px;
+            background-color: #1d3f7e;
+        }
+
+        li a {
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .first > li:hover ul {
+            max-height: 100px;
+        }
+
+        .first > li a:hover {
+            background-color: #1d3f7e;
+        }
+
+        .second > li a:hover {
+            background-color: #265895;
+        }
+
+        .second {
+            /* display: none; */
+            position: relative; /*绝对定位*/
+            left: 0;
+            width: 160px;
+            max-height: 0; /* 初始高度设置为0 */
+            overflow: hidden; /*隐藏溢出内容*/
+            transition: max-height 0.5s ease-out; /*使用max-height过渡*/
+            transform: none !important; /*禁用原来的transform*/
+            transform-origin: unset !important; /*重置transfrom-orifin*/
+        }
+
+        /* li{
+            width: 100px;
+            height: 50px;
+            list-style: none;
+            float: left;
+        } */
+
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .tit {
+            padding: 10px;
+        }
+
+        .abc {
+            padding: 5px;
+        }
+
+        .abb {
+            width: 100%;
+            padding: 2px;
+            background: #08599a;
+        }
+
+        .ttt {
+            font-size: 14px;
+        }
+
+        .dynamic {
+            height: 35px;
+            line-height: 34px;
+            width: 660px;
+            border-bottom: 1px solid #d7d7d7;
+        }
+
+        .dynamicb {
+            width: 250px;
+            background: #08599a;
+            border-bottom: none;
+            height: 44px;
+            line-height: 44px;
+        }
+
+        .dynamice {
+            width: 325px;
+        }
+
+        element.style {
+            width: 320px;
+        }
+
+        .dynamic h2 {
+            font-size: 16px;
+            color: #464646;
+            font-weight: normal;
+            float: left;
+            padding: 0 5px;
+            border-bottom: 2px solid #08599a;
+        }
+
+        .dynamicb h2 {
+            color: #fff;
+            border-bottom: none;
+            text-indent: 10px;
+        }
+
+        .dynamic span a {
+            width: 38px;
+            height: 25px;
+            display: block;
+            float: right;
+        }
+
+        .dynamicb span a {
+            width: 38px;
+            height: 25px;
+            margin-top: 0px;
+            display: block;
+            float: right;
+        }
+
+        .dynamice span a {
+            margin-top: 0;
+        }
+
+        .infor_lista {
+            width: 318px;
+            height: auto;
+            overflow: hidden;
+            border: 1px solid #eee;
+            margin-top: 8px;
+        }
+
+        body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td, img {
+            border: medium none;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        .dynamic_list {
+            margin-top: 10px;
+            width: 314px;
+        }
+
+        .dynamic_listb {
+            width: 325px;
+            margin-top: 12px;
+        }
+
+        .dynamic_liste {
+            width: 320px;
+            margin-top: 0px;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .dynamic_list li {
+            line-height: 31px;
+            font-size: 14px;
+            float: left;
+            color: #5c5c5c;
+            width: 314px;
+            background: url(https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/style_res/xdd.png
+            ) no-repeat 0px 14px;
+            text-indent: 12px;
+        }
+
+        .dynamic_liste li {
+            display: flex; /* 使用flex布局 */
+            justify-content: space-between; /* 标题和日期两端对齐 */
+            align-items: center; /* 垂直居中 */
+            line-height: 31px;
+            font-size: 14px;
+            color: #5c5c5c;
+            width: 314px;
+            background: url(https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/style_res/xdd.png) no-repeat 0px 14px;
+            text-indent: 12px;
+        }
+
+        a, img {
+            border: 0;
+            text-decoration: none;
+        }
+
+        .dynamic_list li a {
+            color: #222222;
+            position: absolute;
+        }
+
+        .dynamic_list li span {
+            float: right;
+            margin-right: 0;
+            color: #666666;
+        }
+
+        .informBoxc {
+            width: 320px;
+            float: left;
+            margin-left: 20px;
+        }
+
+        .content {
+            margin-top: 5px;
+            width: 1000px;
+            float: left;
+        }
+
+        .contente {
+            margin-top: 1px;
+        }
+
+        .gundong {
+            width: 998px;
+            height: 140px;
+            border: 1px solid #eee;
+            margin-top: 8px;
+        }
+
+        .scroll {
+            width: 100%;
+            border: 0;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .hhh {
+            width: 8px;
+            text-align: center;
+        }
+
+        .leaderstyle163284 {
+            font-size: 9pt;
+        }
+
+        A.c163284 {
+            font-size: 9pt;
+            color: #222222;
+            text-decoration: none;
+        }
+
+        A.c163284:link {
+            color: #222222;
+        }
+
+        .TY1 {
+            display: none;
+        }
+
+        A.c163284 {
+            font-size: 9pt;
+            color: #222222;
+            text-decoration: none;
+        }
+
+        A.c163284:visited {
+            color: #222222;
+        }
+
+        .gg {
+            width: 100%;
+            background: #265895;
+            height: 2px;
+            margin: 0;
+        }
+
+        .footWrap {
+            width: 100%;
+            margin: 30px auto 0;
+            position: relative;
+            z-index: 0;
+        }
+
+        .footDiv_two {
+            width: 100%;
+            margin: 10px auto 0;
+            min-height: 96px;
+            color: #FFFFFF;
+            font-size: 13px;
+            overflow: hidden;
+            background: #224b77;
+        }
+
+        .foot_two {
+            width: 1000px;
+            margin: 0px auto;
+        }
+
+        .foot_two p {
+            line-height: 32px;
+            margin-top: 20px;
+            width: 600px;
+            float: left;
+            text-align: left;
+        }
+
+        .choice {
+            width: 1000px;
+            margin-top: 10px;
+            height: auto;
+            float: left;
+        }
+
+        .lh1 {
+            line-height: 1;
+        }
+
+        .white {
+            color: white;
+        }
+
+        .fs16 {
+            font-size: 14px;
+        }
+
+        .pt10 {
+            padding-top: 10px;
+        }
+        .title{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            max-width: 80%; /* 控制标题最大宽度 */
+        }
+        .time {
+            display: inline-block; /* 与标题同行显示 */
+            width: 20%; /* 固定日期宽度 */
+            text-align: right; /* 日期右对齐 */
+            color: #666;
+        }
+
+    </style>
+    <script>
+        window.onload = function () {
+            function News_entry(newsListElement,newsList,i){
+
+                let newsItem = newsList[i];
+                let newsItemElement = document.createElement("li");
+
+                // 添加标题
+                let titleSpan = document.createElement("span");
+                titleSpan.className = "title";
+                titleSpan.textContent = newsItem.title;
+
+                // 添加时间
+                const datePart = newsItem.pubTime.split(' ')[0];
+                const monthDay = datePart.split('-').slice(1).join('-');
+                let timeElement = document.createElement("span");
+                timeElement.className = "time";
+                timeElement.textContent = monthDay;
+
+                // 组装元素
+                newsItemElement.appendChild(titleSpan);
+                newsItemElement.appendChild(timeElement);
+
+                newsItemElement.onclick = function () {
+                    window.location.href = "newsDetails.html?id=" + newsItem.id;
+                }
+                newsListElement.appendChild(newsItemElement);
+
+            }
+            function getAllNews() {
+
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            // console.log("后端返回的数据：", xhr.responseText)
+                            let result = JSON.parse(xhr.responseText);
+                            if (result.code == 200) {
+                                // 假设 editor 已正确初始化
+                                // editor.setHtml("");
+                                let newsList = result.data;
+                                console.log(newsList)
+                                // if (newsList.type === "学院新闻")
+                                // {
+                                //     let newsListElement = document.querySelector(".xueyuanxingwen");
+                                //     News_entry(newsListElement,newsList);
+                                // }
+                                for (let i = 0; i < newsList.length; i++){
+                                    if (newsList[i].type === "学院新闻"){
+                                        let newsListElement = document.querySelector(".xyxw");
+                                        News_entry(newsListElement,newsList,i);
+                                    }else if (newsList[i].type === "通知公告"){
+                                        let newsListElement = document.querySelector(".tzgg");
+                                        News_entry(newsListElement,newsList,i);
+                                    }else if (newsList[i].type === "学术活动") {
+
+                                        let newsListElement = document.querySelector(".xshd");
+                                        News_entry(newsListElement, newsList,i);
+                                    }else if (newsList[i].type === "党建工作") {
+                                        let newsListElement = document.querySelector(".djgz");
+                                        News_entry(newsListElement, newsList,i);
+                                    }else if (newsList[i].type === "学工新闻") {
+                                        let newsListElement = document.querySelector(".xgxw");
+                                        News_entry(newsListElement, newsList,i);
+                                    }
+                                }
+
+
+                            }
+                        }
+                    }
+                }
+                // 将查询字符串附加到 URL 后面
+                xhr.open("GET", "getAllNews.do");
+                // GET 请求不需要在 send 方法中传递数据
+                xhr.send();
+            }
+            getAllNews();
+        }
+    </script>
+</head>
+<body>
+<div class="abb"></div>
+<div class="topDiv">
+
+    <div class="logo"></div>
+
+    <div class="top-fr">
+        <div id="head">
+            <div class="b"></div>
+            <div class="t">
+                <a href=""> 加入收藏 </a> | <a href=""> 学校主页 </a>
+            </div>
+            <div class="Search" frag="窗口1">
+                <form action="">
+                    <input type="text" value="请输入关键字搜索" class="search_text">
+                    <div class="fdj fr">
+                        <input type="submit" class="button pngFix" value>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="navWrap"></div>
+<nav>
+    <ul class="first">
+        <li><a href="">首页</a></li>
+        <li>
+            <a href="">学院概况</a>
+            <ul class="second">
+                <li><a href="">学院简介</a></li>
+                <li><a href="">现任领导</a></li>
+                <li><a href="">组织机构</a></li>
+                <li><a href="">办事指南</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="">师资队伍</a>
+            <ul class="second">
+                <li><a href="">师资队伍简介</a></li>
+                <li><a href="">硕士博士导师</a></li>
+                <li><a href="">按教师所在部门</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="">本科生教育</a>
+            <ul class="second">
+                <li><a href="">本科生教育</a></li>
+                <li><a href="">创新创业</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="">研究生教育</a>
+            <ul class="second">
+                <li><a href="">学位点年度建设</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="">科学研究</a>
+            <ul class="second">
+                <li><a href="">科研平台</a></li>
+                <li><a href="">研究团队</a></li>
+                <li><a href="">科研平台</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="">党建工作</a>
+            <ul class="second">
+                <li><a href="">支部设置</a></li>
+                <li><a href="">专题活动</a></li>
+                <li><a href="">理论学习</a></li>
+                <li><a href="">基层动态</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="">学生工作</a>
+            <ul class="second">
+                <li><a href="">学生活动</a></li>
+                <li><a href="">通知公告</a></li>
+                <li><a href="">就业指导</a></li>
+                <li><a href="">易班动态</a></li>
+            </ul>
+        </li>
+        <li><a href="">人才招聘</a></li>
+        <li><a href="">理论学习</a></li>
+    </ul>
+</nav>
+<center>
+    <div>
+        <img src="https://www.guet.edu.cn/_upload/article/images/be/2d/7cfb63a54f26ac8315a7a1d0459b/1d6fd3ee-5f35-482d-8370-62e2f5508b0a.jpg"
+             width="1000" height="200">
+    </div>
+</center>
+<div class="container w1000 clearfix">
+    <div class="tit"></div>
+    <div class="content contente">
+        <div class="informBox fl" style="margin-left: 0px">
+            <div class="dynamic dynamicb dynamice" style="width: 320px;">
+                <h2>学院新闻</h2>
+                <span>
+                        <a href="" onfocus="undefined">
+                            <img src="https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/w_more.png"
+                                 style="margin-top: 30px">
+                        </a>
+                    </span>
+            </div>
+            <div class="infor_list infor_lista" frag="窗口4">
+                <ul class="dynamic_list dynamic_listb dynamic_liste fr xyxw">
+
+                </ul>
+            </div>
+        </div>
+        <div class="informBox informBoxc fl" frag="窗口5">
+            <div style="position: relative; overflow: hidden;width: 320px;height: 300px;">
+                <div class="dtjt9_div_img">
+                    <img src="" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="informBox informBoxc fl">
+            <div class="dynamic dynamicb dynamice" style="width: 320px;">
+                <h2>通知公告</h2>
+                <span>
+                        <a href="" onfocus="undefined">
+                            <img src="https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/w_more.png"
+                                 style="margin-top: 30px">
+                        </a>
+                    </span>
+            </div>
+            <div class="infor_list infor_lista" frag="窗口4">
+                <ul class="dynamic_list dynamic_listb dynamic_liste fr tzgg">
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="content contente">
+        <div class="tit"></div>
+        <div class="informBox fl" style="margin-left: 0px">
+            <div class="dynamic dynamicb dynamice" style="width: 320px;">
+                <h2>学术活动</h2>
+                <span>
+                        <a href="" onfocus="undefined">
+                            <img src="https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/w_more.png"
+                                 style="margin-top: 30px">
+                        </a>
+                    </span>
+            </div>
+            <div class="infor_list infor_lista" frag="窗口4">
+                <ul class="dynamic_list dynamic_listb dynamic_liste fr xshd">
+
+                </ul>
+            </div>
+        </div>
+        <div class="informBox informBoxc fl" frag="窗口5">
+            <div class="dynamic dynamicb dynamice" style="width: 320px;">
+                <h2>党建工作</h2>
+                <span>
+                        <a href="" onfocus="undefined">
+                            <img src="https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/w_more.png"
+                                 style="margin-top: 30px">
+                        </a>
+                    </span>
+            </div>
+            <div class="infor_list infor_lista" frag="窗口4">
+                <ul class="dynamic_list dynamic_listb dynamic_liste fr djgz">
+
+                </ul>
+            </div>
+        </div>
+        <div class="informBox informBoxc fl">
+            <div class="dynamic dynamicb dynamice" style="width: 320px;">
+                <h2>学工新闻</h2>
+                <span>
+                        <a href="" onfocus="undefined">
+                            <img src="https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/w_more.png"
+                                 style="margin-top: 30px">
+                        </a>
+                    </span>
+            </div>
+            <div class="infor_list infor_lista" frag="窗口4">
+                <ul class="dynamic_list dynamic_listb dynamic_liste fr xgxw">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content contente">
+        <div class="tit"></div>
+        <div>
+            <img src="https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/dsxx.jpg" width="140" height="90">
+            <img src="https://www.guet.edu.cn/_upload/article/images/ab/49/7d2fcd9e45adb3d771f2a445e78d/b30275b3-8d29-4783-9ccb-a0123c1bcccd.jpg"
+                 width="272" height="90">
+            <img src="https://www.guet.edu.cn/_upload/article/images/ab/49/7d2fcd9e45adb3d771f2a445e78d/4dda6c67-a9ba-412f-baa8-7221b4dd92bb.jpg"
+                 width="272" height="90">
+            <img src="https://www.guet.edu.cn/_upload/article/images/ab/49/7d2fcd9e45adb3d771f2a445e78d/4dda6c67-a9ba-412f-baa8-7221b4dd92bb.jpg"
+                 width="272" height="90">
+        </div>
+    </div>
+
+    <div class="content contente">
+        <div class="tit"></div>
+        <div class="dynamic dynamicb dynamice" style="width: 1000px">
+            <h2>学院风采</h2>
+            <span>
+                    <a href="" onfocus="undefined">
+                        <img src="https://www.guet.edu.cn/_upload/tpl/00/1d/29/template29/htmlRes/w_more.png"
+                             style="margin-top: 30px">
+                    </a>
+                </span>
+        </div>
+        <div class="gundong" frg="窗口2">
+            <div class="scroll">
+                <ul style="">
+                    <ul></ul>
+                    <ul></ul>
+                    <ul></ul>
+                    <ul></ul>
+                    <ul></ul>
+                    <ul></ul>
+                    <ul></ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content contente">
+        <div class="abc"></div>
+        <h3>
+            <span>友情链接</span>
+        </h3>
+        <div class="abc"></div>
+        <div class="gg"></div>
+        <div class="abc"></div>
+        <div class="con">
+            <tr>
+                <td><a class="c163284" href="" target="_blank">桂林电子科技大学</a></td>
+                <td class="leaderstyle163284 hhh TY1">|</td>
+                <td><a class="c163284" href="" target="_blank">学校本科教学服务网</a></td>
+                <td class="leaderstyle163284 hhh">|</td>
+                <td><a class="c163284" href="" target="_blank">研究生院</a></td>
+                <td class="leaderstyle163284 hhh TY3">|</td>
+                <td><a class="c163284" href="" target="_blank">广西高校数据分析与重点实验室</a></td>
+            </tr>
+        </div>
+    </div>
+</div>
+<div class="footWrap clearfix">
+    <div class="footDiv_two">
+        <div class="foot_two">
+            <p>Copyright© 2018 All Rights Reserved. 桂林电子科技大学数学与计算科学学院</p>
+            <div class="choice"
+                 style="width: 230px;margin-top: 20px;float: right; color: rgb(255,255,255);line-height: 28px;padding-left: 0px;"
+                 frag="窗口4">
+                <select name="select" onchange="MM_jumpMenu('parent',this,1)"
+                        style="height: 28px; line-height: normal28px;font-size: 14px; margin-right: 10px; width: 230px;">
+
+                    <option value>== 相关链接 ==</option>
+                    <option value="">清华大学</option>
+                    <option value="">北京大学</option>
+                    <option value="">厦门大学</option>
+                    <option value="">复旦大学</option>
+                    <option value="">上海大学</option>
+                </select>
+                <div class="pt10">
+                    <a class="lh1 white fs16 fr" href="" target="_blank" title="管理入口">管理入口</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

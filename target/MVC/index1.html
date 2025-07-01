@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>树形菜单</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .main_menu > li > a {
+            border-bottom: 1px solid black;
+        }
+
+        .submenu > li:last-child a:after {
+            content: "";
+            display: block;
+            width: 190px;
+            position: absolute;
+            left: -30px;
+            top: 40px;
+            border-bottom: 1px solid;
+        }
+
+        .submenu {
+            position: relative;
+            left: 30px;
+        }
+
+        .submenu:before {
+            content: "";
+            display: block;
+            position: absolute;
+            z-index: 1;
+            left: -10px;
+            top: 0;
+            bottom: 0;
+            border: 1px dotted;
+            border-width: 0 0 0 1px;
+        }
+
+        .submenu > li {
+            position: relative;
+        }
+
+        .submenu > li:before {
+            content: "";
+            display: block;
+            width: 10px;
+            position: absolute;
+            left: -10px;
+            top: 19px;
+            border: 1px dotted;
+            border-width: 1px 0 0;
+        }
+
+        .submenu > li:not(:last-child):after {
+            content: "";
+            display: block;
+            width: 190px;
+            position: absolute;
+            left: -30px;
+            top: 40px;
+            border-bottom: 1px dotted;
+        }
+
+        li > a {
+            text-decoration: none;
+            color: #616161;
+            display: block;
+            width: 189px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .main_menu > li > a {
+            padding-left: 10px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            // 在index.html中输出菜单
+            console.log(localStorage.getItem("menus"));
+            let permissionList = JSON.parse(localStorage.getItem("menus")).permissionList;
+            let secondLevelPermissionList = new Array();
+            for (const permission of permissionList) {
+                if (permission.parentId != 0) {
+                    // 把二级菜单拿出来添加到数组中
+                    secondLevelPermissionList.push(permission);
+                }
+            }
+            console.log(permissionList.constructor.toString())// function Array：数组的构造函数
+            for (const permission of permissionList) {
+                console.log("所有菜单：", permission.perName)
+                // 先处理一级菜单
+                if (permission.parentId == 0) {
+                    console.log("一级菜单：", permission.perName)
+                    let liEl = document.createElement("li");
+                    liEl.className = "f" + permission.perId;
+                    let aEl = document.createElement("a");
+                    aEl.appendChild(document.createTextNode(permission.perName));
+                    aEl.href = permission.url;
+                    liEl.appendChild(aEl);
+                    document.querySelector(".main_menu").appendChild(liEl);
+                }
+            }
+            for (const permission of permissionList) {
+                // 下节课处理二级菜单
+                for (const secondPermission of secondLevelPermissionList) {
+                    if (secondPermission.parentId == permission.perId) {
+                        // 拿到一级菜单的LI元素
+                        let firstLi = document.querySelector(".f" + permission.perId);
+                        console.log("一级LI：", firstLi)
+                        let ul = document.createElement("ul");
+                        ul.className = "submenu";
+
+                        let secondLi = document.createElement("li");
+
+                        let a = document.createElement("a");
+                        a.href = secondPermission.url;
+                        a.appendChild(document.createTextNode(secondPermission.perName))
+
+                        secondLi.appendChild(a);
+                        ul.appendChild(secondLi);
+                        firstLi.appendChild(ul);
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<ul class="main_menu">
+
+</ul>
+
+</body>
+</html>

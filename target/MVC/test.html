@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <style>
+        .news-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .news-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        // 页面加载完成后执行
+        window.onload = function () {
+            function getAllNews() {
+
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            console.log("后端返回的数据：", xhr.responseText)
+                            let result = JSON.parse(xhr.responseText);
+                            if (result.code == 200) {
+                                // 假设 editor 已正确初始化
+                                // editor.setHtml("");
+                                let newsList = result.data;
+                                let newsListElement = document.querySelector(".news-list");
+                                for (let i = 0; i < newsList.length; i++) {
+                                    let newsItem = newsList[i];
+                                    let newsItemElement = document.createElement("li");
+                                    newsItemElement.className = "title";
+                                    newsItemElement.innerHTML = newsItem.title;
+                                    newsListElement.appendChild(newsItemElement);
+                                }
+                            }
+                        }
+                    }
+                }
+                // 将查询字符串附加到 URL 后面
+                xhr.open("GET", "getAllNews?");
+                // GET 请求不需要在 send 方法中传递数据
+                xhr.send();
+            }
+            getAllNews();
+        }
+    </script>
+</head>
+<body>
+
+
+<ul class="news-list">
+</ul>
+
+
+</body>
+
+</html>

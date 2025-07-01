@@ -1,0 +1,25 @@
+<beans>
+    <bean id="userController" class="cn.edu.guet.controller.UserController">
+        <property name="userService" ref="userService"></property>
+    </bean>
+    <bean id="userService" class="cn.edu.guet.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDao"></property>
+        <property name="logDao" ref="logDao"></property>
+
+    </bean>
+    <bean id="userDao" class="cn.edu.guet.dao.impl.UserDaoImplOracle">
+    </bean>
+    <bean id="logDao" class="cn.edu.guet.dao.impl.LogDaoImpl">
+    </bean>
+
+    <bean id="newsService" class="cn.edu.guet.service.impl.NewsServiceImpl">
+        <property name="newsDao" ref="newsDao"></property>
+    </bean>
+    <bean id="newsController" class="cn.edu.guet.controller.NewsController">
+        <property name="newsService" ref="newsService"></property>
+    </bean>
+    <bean id="newsDao" class="cn.edu.guet.dao.impl.NewsDaoImpl">
+    </bean>
+
+
+</beans>

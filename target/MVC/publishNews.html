@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet"/>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #editor—wrapper {
+            border: 1px solid #ccc;
+            z-index: 100; /* 按需定义 */
+        }
+
+        #toolbar-container {
+            border-bottom: 1px solid #ccc;
+        }
+
+        #editor-container {
+            height: 500px;
+        }
+    </style>
+    <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
+    <script>
+        const {createEditor, createToolbar} = window.wangEditor
+        const editorConfig = {
+            placeholder: 'Type here...',
+            onChange(editor) {
+                const html = editor.getHtml()
+                // console.log('editor content', html)
+                // 也可以同步到 <textarea>
+            },
+            MENU_CONF: {}
+        }
+        editorConfig.MENU_CONF['uploadImage'] = {
+            server: 'upload.do',
+            maxFileSize: 10 * 1024 * 1024, // 1M
+        }
+        const toolbarConfig = {}
+        let editor = {};
+        window.onload = function () {
+            editor = createEditor({
+                selector: '#editor-container',
+                html: '',
+                config: editorConfig,
+                mode: 'default', // or 'simple'
+            })
+
+            const toolbar = createToolbar({
+                editor,
+                selector: '#toolbar-container',
+                config: toolbarConfig,
+                mode: 'default', // or 'simple'
+            })
+        }
+
+        function saveNews() {
+            let content = editor.getHtml();
+            // 图片回显后，新闻内容会包含图片的url地址
+            console.log("新闻内容：", content)
+            // 用Ajax发送post请求即可¬
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        console.log("后端返回的数据：", xhr.responseText)
+                        let result = JSON.parse(xhr.responseText);
+                        if (result.code == 200) {
+                            editor.setHtml("");
+                        }
+                    }
+                }
+            }
+            let provider = document.querySelector("#provider").value;
+            let type = document.querySelector("#type").value;
+            // 传递给后端的数据，包含了新闻内容、供稿人
+            let data = {
+                content,
+                provider,
+                type
+            }
+            xhr.open("POST", "saveNews.do");
+            xhr.send(JSON.stringify(data))
+            // POST请求，给后端传递参数的方式，改为传递JSON格式，就可以处理新闻内容包含空格问题（你先别做，等老师讲）
+            // 你现在保存新闻的时候，先不要带空格
+        }
+    </script>
+</head>
+<body>
+<!--<img src="http://39.108.123.201:8080/mysite/DSC_2490.JPG" alt="" width="80%" height="50%">-->
+<div id="editor—wrapper">
+    <div id="toolbar-container"><!-- 工具栏 --></div>
+    <div id="editor-container"><!-- 编辑器 --></div>
+</div>
+<label for="provider">供稿人：</label>
+<select name="provider" id="provider">
+    <option value="ly">赖艳</option>
+    <option value="ll">凌琳</option>
+    <option value="ly">李燕</option>
+</select>
+<label for="type">板块：</label>
+<select name="type" id="type">
+    <option value="学院新闻">学院新闻</option>
+    <option value="通知公告">通知公告</option>
+    <option value="学术活动">学术活动</option>
+    <option value="党建工作">党建工作</option>
+    <option value="学工新闻">学工新闻</option>
+
+</select>
+<button onclick="saveNews()">发布</button>
+</body>
+</html>
