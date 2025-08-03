@@ -1,9 +1,11 @@
 pipeline {
     agent any
-    // 全局环境变量，指定编码为 GBK（Windows 系统默认编码）
+    // 全局编码环境变量（Windows 专用）
     environment {
         LANG = 'zh_CN.GBK'
         JAVA_TOOL_OPTIONS = '-Dfile.encoding=GBK'
+        // 解决 Jenkins 控制台解码问题
+        BUILD_DISPLAY_NAME = "${env.BUILD_NUMBER}"
     }
     tools {
         maven 'ceshi1'
@@ -12,33 +14,42 @@ pipeline {
     stages {
         stage('拉取代码') {
             steps {
-                // Windows 下 bat 命令强制使用 GBK 编码输出
-                bat 'chcp 936 & echo 从 GitHub 拉取 main 分支代码...'
+                // 使用 powershell 替代 bat，原生支持 UTF-8 输出
+                powershell 'Write-Host "从 GitHub 拉取 main 分支代码..."'
                 git url: 'https://github.com/msg-555/mvc-.git', branch: 'main'
             }
         }
         
         stage('构建项目') {
             steps {
-                bat 'chcp 936 & echo 使用 Maven 构建 WAR 包...'
-                // Maven 命令添加编码参数
-                bat 'chcp 936 & mvn clean package -Dmaven.test.skip=true -Dfile.encoding=GBK'
-                // 中文提示强制指定编码
-                bat 'chcp 936 & if not exist "target/MVC.war" (echo "ERROR: WAR 包未生成！" && exit 1) else (echo "WAR 包生成成功: target/MVC.war")'
+                powershell 'Write-Host "使用 Maven 构建 WAR 包..."'
+                // Maven 命令指定编码
+                bat 'mvn clean package -Dmaven.test.skip=true -Dfile.encoding=GBK'
+                // 检查 WAR 包是否存在（中文提示）
+                bat '''
+                    chcp 936
+                    if not exist "target/MVC.war" (
+                        echo "ERROR: WAR 包未生成！"
+                        exit 1
+                    ) else (
+                        echo "WAR 包生成成功: target/MVC.war"
+                    )
+                '''
             }
         }
         
         stage('运行测试') {
             steps {
-                bat 'chcp 936 & echo 执行单元测试...'
-                bat 'chcp 936 & mvn test -Dfile.encoding=GBK'
+                powershell 'Write-Host "执行单元测试..."'
+                bat 'mvn test -Dfile.encoding=GBK'
             }
         }
         
         stage('部署到服务器') {
             steps {
-                bat 'chcp 936 & echo 部署 WAR 包到服务器 Tomcat 目录...'
-                bat 'chcp 936 & dir target/MVC.war'
+                powershell 'Write-Host "部署 WAR 包到服务器 Tomcat 目录..."'
+                // 修正 dir 命令语法（Windows 下查看文件需用 /b 参数）
+                bat 'chcp 936 & dir "target/MVC.war" /b'
                 
                 sshPublisher(publishers: [
                     sshPublisherDesc(
@@ -50,7 +61,6 @@ pipeline {
                                 cleanRemote: false,
                                 flatten: true,
                                 execCommand: '''
-                                    # 服务器端（Linux）使用 UTF-8 编码
                                     export LANG=zh_CN.UTF-8
                                     echo "=== 服务器部署验证 ==="
                                     echo "检查 webapps 目录中的 WAR 包..."
@@ -85,15 +95,19 @@ pipeline {
     
     post {
         success {
-            bat 'chcp 936 & echo =============================================='
-            bat 'chcp 936 & echo 🎉 构建部署成功！'
-            bat 'chcp 936 & echo 访问地址：http://111.230.94.55:8080/MVC'
-            bat 'chcp 936 & echo =============================================='
+            powershell '''
+                Write-Host "=============================================="
+                Write-Host "🎉 构建部署成功！"
+                Write-Host "访问地址：http://111.230.94.55:8080/MVC"
+                Write-Host "=============================================="
+            '''
         }
         failure {
-            bat 'chcp 936 & echo =============================================='
-            bat 'chcp 936 & echo ❌ 构建或部署失败，请查看控制台日志排查问题'
-            bat 'chcp 936 & echo =============================================='
+            powershell '''
+                Write-Host "=============================================="
+                Write-Host "❌ 构建或部署失败，请查看控制台日志排查问题"
+                Write-Host "=============================================="
+            '''
         }
     }
 }
