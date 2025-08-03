@@ -14,7 +14,7 @@ pipeline {
         }
         stage('运行测试') {  // 阶段 3：测试
             steps {
-                bat 'mvn test'
+                bat 'E:\\Maven\\apache-maven-3.9.11\\bin\\mvn test'
             }
         }
     }
