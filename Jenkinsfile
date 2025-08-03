@@ -8,8 +8,8 @@ pipeline {
         }
         stage('构建项目') {  // 阶段 2：构建（以 Maven 为例）
             steps {
-                sh 'mvn clean package'  // 执行 shell 命令（Linux/macOS）
-                // bat 'mvn clean package'  // Windows 用 bat 命令
+              //  sh 'mvn clean package'  // 执行 shell 命令（Linux/macOS）
+                 bat 'mvn clean package'  // Windows 用 bat 命令
             }
         }
         stage('运行测试') {  // 阶段 3：测试
