@@ -14,7 +14,7 @@ pipeline {
         }
         stage('运行测试') {  // 阶段 3：测试
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
     }
