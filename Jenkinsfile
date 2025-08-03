@@ -1,29 +1,44 @@
 pipeline {
-    agent any  // 执行环境（any 表示任意可用节点）
-    stages {   // 所有阶段（构建、测试、部署等）
-        stage('拉取代码') {  // 阶段 1：拉取代码
-            steps {          // 阶段内的步骤
-                git url: 'https://github.com/msg-555/mvc-.git', branch: 'main'
-            }
-        }
-        stage('构建项目') {  // 阶段 2：构建（以 Maven 为例）
-            steps {
-              //  sh 'mvn clean package'  // 执行 shell 命令（Linux/macOS）
-                 bat 'E:\\Maven\\apache-maven-3.9.11\\bin\\mvn clean package'  // Windows 用 bat 命令
-            }
-        }
-        stage('运行测试') {  // 阶段 3：测试
-            steps {
-                bat 'E:\\Maven\\apache-maven-3.9.11\\bin\\mvn test'
-            }
-        }
+    agent any
+    tools {
+        nodejs 'NodeJS 16'  // 与全局工具配置的 NodeJS 名称一致
     }
-    post {     // 构建后操作（成功/失败处理）
-        success {
-            echo '构建成功！'
+    environment {
+        NODE_ENV = 'production'
+    }
+    stages {
+        stage('拉取代码') {
+            steps {
+                git url: 'https://github.com/msg-555/mvc-.git', branch: 'dev'  // 替换为你的仓库地址
+            }
         }
-        failure {
-            echo '构建失败！'
+        stage('安装依赖') {
+            steps {
+                bat 'npm install'  // 现在会使用 Jenkins 配置的 NodeJS 环境
+            }
+        }
+        stage('构建') {
+            steps {
+                bat 'npm run build'  // 生成 dist 目录
+            }
+        }
+        stage('部署到服务器') {
+            steps {
+                // 使用 Publish Over SSH 插件部署
+                sshPublisher(publishers: [
+                    sshPublisherDesc(
+                        configName: 'my-server',  // 与 SSH 服务器配置的 Name 一致
+                        transfers: [
+                            sshTransfer(
+                                sourceFiles: 'dist/**',  // 上传 dist 目录下所有文件
+                                remoteDirectory: '/root',  // 服务器目标目录
+                                cleanRemote: true,  // 可选：上传前清空服务器目标目录
+                                flatten: false  // 保留 dist 内的目录结构
+                            )
+                        ]
+                    )
+                ])
+            }
         }
     }
 }
