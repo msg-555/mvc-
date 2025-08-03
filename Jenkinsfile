@@ -18,7 +18,7 @@ pipeline {
         stage('拉取代码') {
             steps {
                 echo "从Git仓库拉取最新代码..."
-                git url: 'https://github.com/msg-555/mvc-.git', branch: 'dev'
+                git url: 'https://github.com/msg-555/mvc-.git', branch: 'main'
             }
         }
         
