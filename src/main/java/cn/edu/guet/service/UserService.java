@@ -18,6 +18,6 @@ public interface UserService {
 
     HttpResult deleteUser(int userId) throws SQLException;
     List<Permission> getPermissionsByUsername(String username);
-
-
+    
+    boolean login(String username, String password);
 }

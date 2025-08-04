@@ -45,9 +45,20 @@ public class UserController {
         }
     }
     @RequestMapping(value = "/login")
-    public HttpResult login(String username) {
-        List<Permission> permissions = userService.getPermissionsByUsername(username);
-        return HttpResult.ok(permissions);
+    public HttpResult login(String username, String password) {
+        // 验证用户名和密码是否为空
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+            return HttpResult.error("用户名或密码不能为空");
+        }
+        
+        // 实际验证用户凭据
+        boolean isValidUser = userService.login(username, password);
+        if (isValidUser) {
+            List<Permission> permissions = userService.getPermissionsByUsername(username);
+            return HttpResult.ok(permissions);
+        } else {
+            return HttpResult.error("用户名或密码错误");
+        }
     }
 
 

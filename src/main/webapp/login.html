@@ -17,8 +17,8 @@
                             console.log("服务器返回的结果：", xhr.responseText);
                             // 把JSON串转换成JavaScript对象
                             let data = JSON.parse(xhr.responseText);
-                            // 判断对象的status属性值
-                            if(data.status=="200"){
+                            // 判断对象的code属性值（注意是数字200，不是字符串"200"）
+                            if(data.code == 200){
                                 // 解析数据，添加到ul中
                                 localStorage.setItem("menus",xhr.responseText)
                                 window.location.href="index.html";
@@ -42,7 +42,7 @@
   </form>
   -->
 <label for="username">用户名：</label> <input type="text" name="username" id="username" value="zhangsan">
-<label for="password">密码：</label> <input type="text" name="password" id="password" value="zs1234">
+<label for="password">密码：</label> <input type="password" name="password" id="password" value="zs1234">
 <button>登录</button>
 </body>
 </html>

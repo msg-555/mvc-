@@ -72,6 +72,11 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public List<Permission> getPermissionsByUsername(String username) {
-    return userDao.getPermissionsByUsername(username);
+        return userDao.getPermissionsByUsername(username);
+    }
+    
+    @Override
+    public boolean login(String username, String password) {
+        return userDao.login(username, password);
     }
 }
