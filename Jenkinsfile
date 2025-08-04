@@ -47,7 +47,7 @@ pipeline {
                         transfers: [
                             sshTransfer(
                                 sourceFiles: 'target/MVC.war',
-                                remoteDirectory: '/apache-tomcat-10.1.19/webapps',
+                                remoteDirectory: 'apache-tomcat-10.1.19/webapps',
                                 cleanRemote: false,
                                 flatten: true,
                                 execCommand: '''
