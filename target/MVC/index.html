@@ -115,46 +115,49 @@
         window.onload = function () {
             // 在index.html中输出菜单
             console.log(localStorage.getItem("menus"));
-            let permissionList = JSON.parse(localStorage.getItem("menus")).permissionList;
+            let result = JSON.parse(localStorage.getItem("menus"));
+            let permissionList = result.data; // 从data属性获取权限列表，而不是permissionList属性
 
-            console.log(permissionList.constructor.toString())// function Array：数组的构造函数
-            for (const permission of permissionList) {
+            // 检查permissionList是否存在且为数组
+            if (permissionList && Array.isArray(permissionList)) {
+                // 构建菜单树结构
                 // 先处理一级菜单
-                if (permission.parentId == 0) {
-                    console.log("一级菜单：", permission.perName)
-                    let liEl = document.createElement("li");
-                    liEl.className = "f" + permission.perId;
-                    let aEl = document.createElement("a");
-                    aEl.appendChild(document.createTextNode(permission.perName));
-                    aEl.href = permission.url;
-                    liEl.appendChild(aEl);
-                    document.querySelector(".main_menu").appendChild(liEl);
-                    // 子菜单数组长度不为0（说明有子菜单）
-                    if (permission.subPermissionList.length != 0) {
-                        console.log("***********: ", permission.subPermissionList);
-                        let ul = document.createElement("ul");
-                        ul.className = "submenu";
-                        permission.subPermissionList.forEach(secondPermission => {
-                            let secondLi = document.createElement("li");
-
-                            let a = document.createElement("a");
-                            a.href = secondPermission.url;
-                            a.target = "content"
-                            // a.href = "javascript:void(0)";
-                            // a.onclick = function () {
-                            //     document.querySelector(".main > iframe").src = secondPermission.url;
-                            // }
-                            a.appendChild(document.createTextNode(secondPermission.perName))
-                            secondLi.appendChild(a);
-                            ul.appendChild(secondLi);
-                        })
-                        liEl.appendChild(ul);
+                for (const permission of permissionList) {
+                    if (permission.parentId == 0) {
+                        console.log("一级菜单：", permission.perName)
+                        let liEl = document.createElement("li");
+                        liEl.className = "f" + permission.perId;
+                        let aEl = document.createElement("a");
+                        aEl.appendChild(document.createTextNode(permission.perName));
+                        // 如果有URL则设置链接，否则设置为javascript:void(0)
+                        aEl.href = permission.url ? permission.url : "javascript:void(0)";
+                        liEl.appendChild(aEl);
                         document.querySelector(".main_menu").appendChild(liEl);
+
+                        // 查找并处理子菜单
+                        let subMenus = permissionList.filter(p => p.parentId === permission.perId);
+                        if (subMenus.length > 0) {
+                            console.log("子菜单：", subMenus);
+                            let ul = document.createElement("ul");
+                            ul.className = "submenu";
+                            subMenus.forEach(secondPermission => {
+                                let secondLi = document.createElement("li");
+
+                                let a = document.createElement("a");
+                                a.href = secondPermission.url ? secondPermission.url : "javascript:void(0)";
+                                a.target = "content"
+                                a.appendChild(document.createTextNode(secondPermission.perName))
+                                secondLi.appendChild(a);
+                                ul.appendChild(secondLi);
+                            })
+                            liEl.appendChild(ul);
+                        }
                     }
                 }
             }
         }
     </script>
+
 </head>
 <body>
 <header>
