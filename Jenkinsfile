@@ -64,36 +64,28 @@ pipeline {
                                 cleanRemote: false,
                                 flatten: true,
                                 execCommand: '''
-                                    echo "=== Server deployment verification ==="
-                                    echo "Current working directory:"
-                                    pwd
+                                    # 定义Tomcat webapps目录的实际路径（带root前缀）
+                                    TOMCAT_WEBAPPS="/root/apache-tomcat-10.1.19/webapps"
                                     
-                                    echo "Checking webapps directory exists..."
-                                    if [ ! -d "/apache-tomcat-10.1.19/webapps" ]; then
-                                        echo "ERROR: Webapps directory not found!"
-                                        exit 1
-                                    fi
+                                    echo "=== 确认服务器目标目录 ==="
+                                    ls -ld $TOMCAT_WEBAPPS || { echo "ERROR: 目标目录 $TOMCAT_WEBAPPS 不存在!"; exit 1; }
                                     
-                                    echo "Checking uploaded WAR package..."
-                                    ls -l /apache-tomcat-10.1.19/webapps/MVC.war || echo "WAR package upload failed!"
+                                    echo "=== 检查WAR包是否上传成功 ==="
+                                    ls -l $TOMCAT_WEBAPPS/MVC.war || { echo "ERROR: WAR包未上传到 $TOMCAT_WEBAPPS!"; exit 1; }
                                     
-                                    echo "Stopping Tomcat service..."
-                                    /apache-tomcat-10.1.19/bin/shutdown.sh
+                                    echo "=== 停止Tomcat服务 ==="
+                                    /root/apache-tomcat-10.1.19/bin/shutdown.sh
                                     sleep 5
                                     
-                                    echo "Cleaning old deployment files..."
-                                    rm -rf /apache-tomcat-10.1.19/webapps/MVC*
+                                    echo "=== 清理旧部署文件 ==="
+                                    rm -rf $TOMCAT_WEBAPPS/MVC*
                                     
-                                    echo "Starting Tomcat after confirming WAR exists..."
-                                    if [ -f "/apache-tomcat-10.1.19/webapps/MVC.war" ]; then
-                                        /apache-tomcat-10.1.19/bin/startup.sh
-                                        sleep 10
-                                        echo "Webapps directory after deployment:"
-                                        ls -l /apache-tomcat-10.1.19/webapps
-                                    else
-                                        echo "ERROR: MVC.war not found on server, deployment aborted!"
-                                        exit 1
-                                    fi
+                                    echo "=== 启动Tomcat ==="
+                                    /root/apache-tomcat-10.1.19/bin/startup.sh
+                                    sleep 10
+                                    
+                                    echo "=== 部署后目录检查 ==="
+                                    ls -l $TOMCAT_WEBAPPS
                                 '''
                             )
                         ],
