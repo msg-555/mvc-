@@ -11,7 +11,6 @@ pipeline {
                 git url: 'https://github.com/msg-555/mvc-.git', branch: 'main'
             }
         }
-        
         stage('构建项目') {
             steps {
                 echo "Building WAR package with Maven..."
