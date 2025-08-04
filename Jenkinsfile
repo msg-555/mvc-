@@ -16,13 +16,19 @@ pipeline {
             steps {
                 echo "Building WAR package with Maven..."
                 bat 'mvn clean package -Dmaven.test.skip=true'
-                // 检查 WAR 包是否生成（英文提示，避免乱码）
+                // 检查 WAR 包是否生成
                 bat '''
                     if not exist "target/MVC.war" (
                         echo "ERROR: WAR package not generated!"
                         exit 1
                     ) else (
                         echo "WAR package generated successfully: target/MVC.war"
+                        dir target (
+                            dir MVC.war (
+                                echo "WAR package size:"
+                                dir /s /b MVC.war
+                            )
+                        )
                     )
                 '''
             }
@@ -38,8 +44,15 @@ pipeline {
         stage('部署到服务器') {
             steps {
                 echo "Deploying WAR package to server Tomcat directory..."
-                // 修正 dir 命令语法（使用正确的 Windows 命令格式）
-                bat 'dir "target\\MVC.war"'  // Windows 路径用反斜杠，且不加多余参数
+                
+                // 先确认本地WAR包存在
+                script {
+                    def warFile = fileExists('target/MVC.war')
+                    if (!warFile) {
+                        error("WAR package not found! Cannot deploy.")
+                    }
+                    echo "Local WAR package confirmed: target/MVC.war"
+                }
                 
                 sshPublisher(publishers: [
                     sshPublisherDesc(
@@ -52,29 +65,40 @@ pipeline {
                                 flatten: true,
                                 execCommand: '''
                                     echo "=== Server deployment verification ==="
-                                    echo "Checking WAR package in webapps directory..."
-                                    ls -l /root/apache-tomcat-10.1.19/webapps/MVC.war || echo "WAR package upload failed!"
+                                    echo "Current working directory:"
+                                    pwd
+                                    
+                                    echo "Checking webapps directory exists..."
+                                    if [ ! -d "/apache-tomcat-10.1.19/webapps" ]; then
+                                        echo "ERROR: Webapps directory not found!"
+                                        exit 1
+                                    fi
+                                    
+                                    echo "Checking uploaded WAR package..."
+                                    ls -l /apache-tomcat-10.1.19/webapps/MVC.war || echo "WAR package upload failed!"
                                     
                                     echo "Stopping Tomcat service..."
-                                    /root/apache-tomcat-10.1.19/bin/shutdown.sh
+                                    /apache-tomcat-10.1.19/bin/shutdown.sh
                                     sleep 5
                                     
                                     echo "Cleaning old deployment files..."
-                                    rm -rf /root/apache-tomcat-10.1.19/webapps/MVC*
+                                    rm -rf /apache-tomcat-10.1.19/webapps/MVC*
                                     
                                     echo "Starting Tomcat after confirming WAR exists..."
-                                    if [ -f "/root/apache-tomcat-10.1.19/webapps/MVC.war" ]; then
-                                        /root/apache-tomcat-10.1.19/bin/startup.sh
+                                    if [ -f "/apache-tomcat-10.1.19/webapps/MVC.war" ]; then
+                                        /apache-tomcat-10.1.19/bin/startup.sh
                                         sleep 10
                                         echo "Webapps directory after deployment:"
-                                        ls -l /root/apache-tomcat-10.1.19/webapps
+                                        ls -l /apache-tomcat-10.1.19/webapps
                                     else
                                         echo "ERROR: MVC.war not found on server, deployment aborted!"
                                         exit 1
                                     fi
                                 '''
                             )
-                        ]
+                        ],
+                        // 添加 verbose 模式便于调试
+                        verbose: true
                     )
                 ])
             }
