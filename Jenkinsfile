@@ -96,7 +96,7 @@ pipeline {
         success {
             echo "=============================================="
             echo "🎉 Build and deployment completed successfully!"
-            echo "Access URL: http://111.230.94.55:8080/MVC"
+            echo "Access URL: http://47.119.142.140:8080/MVC"
             echo "=============================================="
         }
         failure {
