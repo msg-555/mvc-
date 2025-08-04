@@ -7,11 +7,13 @@ pipeline {
     stages {
         stage('拉取代码') {
             steps {
-                echo "Pulling code from GitHub main branch..."
-                git url: 'https://github.com/msg-555/mvc-.git', branch: 'main'
+                echo "通过 SSH 拉取代码..."
+                git url: 'git@github.com:msg-555/mvc-.git',  // SSH 地址
+                    branch: 'main',
+                    credentialsId: 'github-ssh-credentials'  // 步骤 3 中配置的凭据 ID
             }
         }
-        
+                
         stage('构建项目') {
             steps {
                 echo "Building WAR package with Maven..."
@@ -47,27 +49,27 @@ pipeline {
                         transfers: [
                             sshTransfer(
                                 sourceFiles: 'target/MVC.war',
-                                remoteDirectory: '/root/apache-tomcat-10.1.19/webapps',
+                                remoteDirectory: '/apache-tomcat-10.1.19/webapps',
                                 cleanRemote: false,
                                 flatten: true,
                                 execCommand: '''
                                     echo "=== Server deployment verification ==="
                                     echo "Checking WAR package in webapps directory..."
-                                    ls -l /root/apache-tomcat-10.1.19/webapps/MVC.war || echo "WAR package upload failed!"
+                                    ls -l /apache-tomcat-10.1.19/webapps/MVC.war || echo "WAR package upload failed!"
                                     
                                     echo "Stopping Tomcat service..."
-                                    /root/apache-tomcat-10.1.19/bin/shutdown.sh
+                                    /apache-tomcat-10.1.19/bin/shutdown.sh
                                     sleep 5
                                     
                                     echo "Cleaning old deployment files..."
-                                    rm -rf /root/apache-tomcat-10.1.19/webapps/MVC*
+                                    rm -rf /apache-tomcat-10.1.19/webapps/MVC*
                                     
                                     echo "Starting Tomcat after confirming WAR exists..."
-                                    if [ -f "/root/apache-tomcat-10.1.19/webapps/MVC.war" ]; then
-                                        /root/apache-tomcat-10.1.19/bin/startup.sh
+                                    if [ -f "/apache-tomcat-10.1.19/webapps/MVC.war" ]; then
+                                        /apache-tomcat-10.1.19/bin/startup.sh
                                         sleep 10
                                         echo "Webapps directory after deployment:"
-                                        ls -l /root/apache-tomcat-10.1.19/webapps
+                                        ls -l /apache-tomcat-10.1.19/webapps
                                     else
                                         echo "ERROR: MVC.war not found on server, deployment aborted!"
                                         exit 1
