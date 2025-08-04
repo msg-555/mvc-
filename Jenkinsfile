@@ -16,6 +16,7 @@ pipeline {
             steps {
                 echo "Building WAR package with Maven..."
                 bat 'mvn clean package -Dmaven.test.skip=true'
+                // 检查 WAR 包是否生成（英文提示，避免乱码）
                 bat '''
                     if not exist "target/MVC.war" (
                         echo "ERROR: WAR package not generated!"
@@ -37,7 +38,8 @@ pipeline {
         stage('部署到服务器') {
             steps {
                 echo "Deploying WAR package to server Tomcat directory..."
-                bat 'dir "target\\MVC.war"'
+                // 修正 dir 命令语法（使用正确的 Windows 命令格式）
+                bat 'dir "target\\MVC.war"'  // Windows 路径用反斜杠，且不加多余参数
                 
                 sshPublisher(publishers: [
                     sshPublisherDesc(
@@ -45,8 +47,7 @@ pipeline {
                         transfers: [
                             sshTransfer(
                                 sourceFiles: 'target/MVC.war',
-                                // 用相对路径，基于 SSH 登录默认目录 /root
-                                remoteDirectory: 'apache-tomcat-10.1.19/webapps', 
+                                remoteDirectory: '/apache-tomcat-10.1.19/webapps',
                                 cleanRemote: false,
                                 flatten: true,
                                 execCommand: '''
