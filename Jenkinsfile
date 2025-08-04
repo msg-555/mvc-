@@ -17,7 +17,7 @@ pipeline {
                 bat 'mvn clean package -Dmaven.test.skip=true'
                 // 检查 WAR 包是否生成
                 bat '''
-                    if not exist "target/MVC.war" (
+                    if not exist "target/MVC.jar" (
                         echo "ERROR: WAR package not generated!"
                         exit 1
                     ) else (
