@@ -60,12 +60,12 @@ pipeline {
                         transfers: [
                             sshTransfer(
                                 sourceFiles: 'target/MVC.war',
-                                remoteDirectory: '/apache-tomcat-10.1.19/webapps',
+                                remoteDirectory: '/apache-tomcat-9.0.89/webapps',
                                 cleanRemote: false,
                                 flatten: true,
                                 execCommand: '''
                                     # 定义Tomcat webapps目录的实际路径（带root前缀）
-                                    TOMCAT_WEBAPPS="/root/apache-tomcat-10.1.19/webapps"
+                                    TOMCAT_WEBAPPS="/root/apache-tomcat-9.0.89/webapps"
                                     
                                     echo "=== 确认服务器目标目录 ==="
                                     ls -ld $TOMCAT_WEBAPPS || { echo "ERROR: 目标目录 $TOMCAT_WEBAPPS 不存在!"; exit 1; }
@@ -74,14 +74,14 @@ pipeline {
                                     ls -l $TOMCAT_WEBAPPS/MVC.war || { echo "ERROR: WAR包未上传到 $TOMCAT_WEBAPPS!"; exit 1; }
                                     
                                     echo "=== 停止Tomcat服务 ==="
-                                    /root/apache-tomcat-10.1.19/bin/shutdown.sh
+                                    /root/apache-tomcat-9.0.89/bin/shutdown.sh
                                     sleep 5
                                     
                                     echo "=== 清理旧部署文件 ==="
                                     rm -rf $TOMCAT_WEBAPPS/MVC*
                                     
                                     echo "=== 启动Tomcat ==="
-                                    /root/apache-tomcat-10.1.19/bin/startup.sh
+                                    /root/apache-tomcat-9.0.89/bin/startup.sh
                                     sleep 10
                                     
                                     echo "=== 部署后目录检查 ==="
