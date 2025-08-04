@@ -77,13 +77,9 @@ pipeline {
                                     /root/apache-tomcat-9.0.89/bin/shutdown.sh
                                     sleep 5
                                     
-                                    echo "=== 清理旧部署文件 ==="
-                                    rm -rf $TOMCAT_WEBAPPS/MVC*
-                                    
                                     echo "=== 启动Tomcat ==="
                                     /root/apache-tomcat-9.0.89/bin/startup.sh
                                     sleep 10
-                                    
                                     echo "=== 部署后目录检查 ==="
                                     ls -l $TOMCAT_WEBAPPS
                                 '''
