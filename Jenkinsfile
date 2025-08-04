@@ -8,9 +8,11 @@ pipeline {
         stage('拉取代码') {
             steps {
                 echo "Pulling code from GitHub main branch..."
+                //你要拉取的github
                 git url: 'https://github.com/msg-555/mvc-.git', branch: 'main'
             }
         }
+        //这里是拿校园官网做测试所以生成的是war，小程序前后端分离所以根据实质情况改成jar，MVC是项目名，根据实际情况修改
         stage('构建项目') {
             steps {
                 echo "Building WAR package with Maven..."
@@ -63,7 +65,7 @@ pipeline {
                                 cleanRemote: false,
                                 flatten: true,
                                 execCommand: '''
-                                    # 定义Tomcat webapps目录的实际路径（带root前缀）
+                                    # 定义Tomcat webapps目录的实际路径（带root前缀），根据自己的实际情况写
                                     TOMCAT_WEBAPPS="/root/apache-tomcat-9.0.89/webapps"
                                     
                                     echo "=== 确认服务器目标目录 ==="
@@ -94,9 +96,10 @@ pipeline {
     
     post {
         success {
+            //url写自己服务器的具体域名
             echo "=============================================="
             echo "🎉 Build and deployment completed successfully!"
-            echo "Access URL: http://47.119.142.140:8080/MVC"
+            echo "Access URL: http://47.119.142.140:8080/MVC"     
             echo "=============================================="
         }
         failure {
