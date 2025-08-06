@@ -12,6 +12,7 @@ pipeline {
                 git url: 'https://github.com/msg-555/mvc-.git', branch: 'main'
             }
         }
+        
         //这里是拿校园官网做测试所以生成的是war，小程序前后端分离所以根据实质情况改成jar，MVC是项目名，根据实际情况修改
         stage('构建项目') {
             steps {
