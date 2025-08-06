@@ -50,13 +50,12 @@ public class NewsController {
     }
     @RequestMapping(value = "/upload")
     public void upload(HttpServletRequest request, HttpServletResponse response) {
-        String dir = System.getProperty("user.dir");
-        System.out.println("我的路径：" + dir);
-        dir = dir.substring(0, dir.lastIndexOf("\\"));
-        String uri = request.getRequestURI();
-        int index = uri.lastIndexOf("\\");
-        uri = uri.substring(index + 1);
-        String realPath = dir + "\\webapps\\upload";
+        // 使用ServletContext获取实际的上传路径，替代硬编码的本地路径
+        String realPath = request.getServletContext().getRealPath("/upload");
+        File uploadDir = new File(realPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
         System.out.println("实际路径：" + realPath);
         // 检查输入请求是否为multipart表单数据。
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -86,12 +85,13 @@ public class NewsController {
                     }
                 } else {// 如果是上传文件，显示文件名。
                     File fullFile = new File(item.getName());
-                    File savedFile = new File(realPath + "\\", fullFile.getName());
+                    File savedFile = new File(realPath, fullFile.getName());
                     try {
                         item.write(savedFile);// 保存文件到指定目录：upload
                         response.setContentType("application/json;utf-8");
                         PrintWriter out = response.getWriter();
-                        String url = "http://localhost:8080/upload/" + fullFile.getName();
+                        // 使用相对路径，替代硬编码的localhost地址
+                        String url = request.getContextPath() + "/upload/" + fullFile.getName();
                         Data data = new Data();
                         data.setUrl(url);
                         WangEditorVo wangEditorVo = new WangEditorVo();
